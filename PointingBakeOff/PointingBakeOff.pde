@@ -17,6 +17,7 @@ int userY = mouseY; //stores the Y position of the user's cursor
 int finishTime = 0; //records the time of the final click
 int hits = 0; //number of succesful clicks
 int misses = 0; //number of missed clicks
+int best = Integer.MAX_VALUE;
 
 // You can edit variables below here and also add new ones as you see fit
 int numRepeats = 1; //sets the number of times each button repeats in the test (you can edit this)
@@ -53,14 +54,15 @@ void draw()
 
   // you shouldn't need to edit anything above this line! You can edit below this line as you see fit
 
-  fill(0, 255, 255); // set fill color to red
-  stroke(0, 255, 255);
+  if (lastX != 0 && lastY != 0) {
+   stroke(0, 255, 0);
+   line(lastX, lastY, ((int) trials.get(trialNum) % 4) * padding * 2 + margin  + padding/2, ((int) trials.get(trialNum) / 4) * padding * 2 + margin + padding/2);
+  }
+
+  fill(255, 255, 255); // set fill color to red
+  stroke(255, 255, 255);
     ellipse(userX, userY, 6, 6); //draw user cursor as a circle with a diameter of 20
-    
-  //if (lastX != 0 && lastY != 0) {
-  //  stroke(0, 255, 0);
-  //  line(lastX, lastY, ((int) trials.get(trialNum) % 4) * padding * 2 + margin  + padding/2, ((int) trials.get(trialNum) / 4) * padding * 2 + margin + padding/2);
-  //}
+
 }
 
 void mousePressed() // test to see if hit was in target!
@@ -161,10 +163,14 @@ void drawButton(int i)
 
   if ((Integer)trials.get(trialNum) == i) {// see if current button is the target
     stroke(0, 255, 0);
-    fill(255, 0, 0); // if so, fill cyan
+    if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) {
+      fill(0, 255, 0);
+    } else {
+      fill(255, 0, 0); // if so, fill cyan
+    }
   }
   else if (trialNum < trials.size() - 1 && (Integer) trials.get(trialNum + 1) == i) {
-    fill(120);
+   fill(150);
   } else {
     fill(35); // if not, fill gray
   }
