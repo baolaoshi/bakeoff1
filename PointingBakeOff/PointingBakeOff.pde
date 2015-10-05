@@ -61,7 +61,7 @@ void draw()
 
   fill(255, 255, 255); // set fill color to red
   stroke(255, 255, 255);
-  ellipse(userX, userY, 6, 6); //draw user cursor as a circle with a diameter of 20
+  ellipse(userX, userY, 12, 12); //draw user cursor as a circle with a diameter of 20
 
   if (trialNum > 0 && trials.get(trialNum) == trials.get(trialNum - 1)) {
     fill(255, 0, 0);
@@ -179,6 +179,13 @@ void drawButton(int i)
   }
 
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
+}
+
+void keyPressed() {
+  System.out.println("HI");
+  if (key == 32) {
+    mousePressed();
+  }
 }
 
 void mouseMoved() // Don't edit this
