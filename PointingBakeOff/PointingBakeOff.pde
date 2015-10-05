@@ -20,7 +20,7 @@ int misses = 0; //number of missed clicks
 int best = Integer.MAX_VALUE;
 
 // You can edit variables below here and also add new ones as you see fit
-int numRepeats = 1; //sets the number of times each button repeats in the test (you can edit this)
+int numRepeats = 3; //sets the number of times each button repeats in the test (you can edit this)
 
 
 void draw()
@@ -55,14 +55,18 @@ void draw()
   // you shouldn't need to edit anything above this line! You can edit below this line as you see fit
 
   if (lastX != 0 && lastY != 0) {
-   stroke(0, 255, 0);
-   line(lastX, lastY, ((int) trials.get(trialNum) % 4) * padding * 2 + margin  + padding/2, ((int) trials.get(trialNum) / 4) * padding * 2 + margin + padding/2);
+    stroke(0, 255, 0);
+    line(lastX, lastY, ((int) trials.get(trialNum) % 4) * padding * 2 + margin  + padding/2, ((int) trials.get(trialNum) / 4) * padding * 2 + margin + padding/2);
   }
 
   fill(255, 255, 255); // set fill color to red
   stroke(255, 255, 255);
-    ellipse(userX, userY, 6, 6); //draw user cursor as a circle with a diameter of 20
+  ellipse(userX, userY, 6, 6); //draw user cursor as a circle with a diameter of 20
 
+  if (trialNum > 0 && trials.get(trialNum) == trials.get(trialNum - 1)) {
+    fill(255, 0, 0);
+    text("CLICK SAME!", mouseX, mouseY - 10);
+  }
 }
 
 void mousePressed() // test to see if hit was in target!
@@ -101,10 +105,10 @@ void mousePressed() // test to see if hit was in target!
   //can manipulate cursor at the end of a trial if you wish
   //userX = width/2; //example manipulation
   //userY = height/2; //example manipulation
-  
-  lastX = userX;
-  lastY = userY;
-  
+
+  lastX = getButtonLocation((int) trials.get(trialNum)).x + padding/2;
+  lastY = getButtonLocation((int) trials.get(trialNum)).y + padding/2;
+
   trialNum++; // Increment trial number
 }
 
@@ -131,7 +135,7 @@ void updateUserMouse() // YOU CAN EDIT THIS
 void setup()
 {
   size(900, 900, P2D); // set the size of the window
-  //noCursor(); // hides the system cursor (can turn on for debug, but should be off otherwise!)
+  // noCursor(); // hides the system cursor (can turn on for debug, but should be off otherwise!)
   noStroke(); //turn off all strokes, we're just using fills here (can change this if you want)
   noSmooth();
   textFont(createFont("Arial", 16));
@@ -168,11 +172,10 @@ void drawButton(int i)
     } else {
       fill(255, 0, 0); // if so, fill cyan
     }
-  }
-  else if (trialNum < trials.size() - 1 && (Integer) trials.get(trialNum + 1) == i) {
-   fill(150);
+  } else if (trialNum < trials.size() - 1 && (Integer) trials.get(trialNum + 1) == i) {
+    fill(0, 0, 255);
   } else {
-    fill(35); // if not, fill gray
+    fill(150); // if not, fill gray
   }
 
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
