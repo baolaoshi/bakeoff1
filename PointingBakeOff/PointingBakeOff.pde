@@ -64,7 +64,7 @@ void draw()
   ellipse(userX, userY, 12, 12); //draw user cursor as a circle with a diameter of 20
 
   if (trialNum > 0 && trials.get(trialNum) == trials.get(trialNum - 1)) {
-    fill(255, 0, 0);
+    fill(255);
     text("CLICK SAME!", mouseX, mouseY - 10);
   }
 }
@@ -167,7 +167,9 @@ void drawButton(int i)
 
   if ((Integer)trials.get(trialNum) == i) {// see if current button is the target
     stroke(0, 255, 0);
-    if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) {
+    if(trialNum > 0 && trials.get(trialNum) == trials.get(trialNum - 1)) {
+      fill(255, 0, 255);
+    } else if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) {
       fill(0, 255, 0);
     } else {
       fill(255, 0, 0); // if so, fill cyan
