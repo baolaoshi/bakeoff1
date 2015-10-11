@@ -75,6 +75,10 @@ void draw()
     text("Total time taken: " + (finishTime-startTime) / 1000f + " sec", width / 2, height / 2 + 80);
     text("Average time for each button: " + ((finishTime-startTime) / 1000f)/(float)(hits+misses) + " sec", width / 2, height / 2 + 100);
 
+    for (Object d : datas) {
+      System.out.println(d.toString());
+    }
+
     return; //return, nothing else to do now test is over
   }
 
@@ -121,10 +125,7 @@ void mousePressed() // test to see if hit was in target!
     System.out.println("Accuracy: " + (float)hits*100f/(float)(hits+misses) +"%");
     System.out.println("Total time taken: " + (finishTime-startTime) / 1000f + " sec");
     System.out.println("Average time for each button: " + ((finishTime-startTime) / 1000f)/(float)(hits+misses) + " sec");
-    for (Object d : datas) {
-      System.out.println(d.toString());
-    }
-  }
+ }
 
   Rectangle bounds = getButtonLocation((Integer)trials.get(trialNum));
 
