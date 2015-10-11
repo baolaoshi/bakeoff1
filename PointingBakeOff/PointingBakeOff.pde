@@ -55,7 +55,7 @@ int misses = 0; //number of missed clicks
 int best = Integer.MAX_VALUE;
 
 // You can edit variables below here and also add new ones as you see fit
-int numRepeats = 2; //sets the number of times each button repeats in the test (you can edit this)
+int numRepeats = 10; //sets the number of times each button repeats in the test (you can edit this)
 
 
 void draw()
