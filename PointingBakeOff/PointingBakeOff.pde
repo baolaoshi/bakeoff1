@@ -75,10 +75,6 @@ void draw()
     text("Total time taken: " + (finishTime-startTime) / 1000f + " sec", width / 2, height / 2 + 80);
     text("Average time for each button: " + ((finishTime-startTime) / 1000f)/(float)(hits+misses) + " sec", width / 2, height / 2 + 100);
 
-    for (Object d : datas) {
-      System.out.println(d.toString());
-    }
-
     return; //return, nothing else to do now test is over
   }
 
@@ -139,12 +135,11 @@ void mousePressed() // test to see if hit was in target!
       Data newD = new Data(trialNum, lastMouseX, lastMouseY, bounds.x + bounds.width/2, bounds.y + bounds.width/2, padding, millis() - lastMillis, true);
       datas.add(newD);
     }
-  } else
+  } else {
     if (trialNum > 0) {
       Data newD = new Data(trialNum, lastMouseX, lastMouseY, bounds.x + bounds.width/2, bounds.y + bounds.width/2, padding, millis() - lastMillis, false);
       datas.add(newD);
     }
-  {
     System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
     misses++;
   }
@@ -160,6 +155,12 @@ void mousePressed() // test to see if hit was in target!
   lastMillis = millis();
 
   trialNum++; // Increment trial number
+  
+  if (trialNum == trials.size()) {
+    for (Object d : datas) {
+      System.out.println(d.toString());
+    }
+  }
 }
 
 
