@@ -3,10 +3,45 @@ import java.util.ArrayList;
 import java.util.Collections;
 import processing.core.PApplet;
 
+public class Data {
+  private int trialNum;
+  private int mX;
+  private int mY;
+  private int currX;
+  private int currY;
+  private int w;
+  private double timeTaken;
+  private boolean success;
+
+  public Data(int trialNum, int mX, int mY, int currX, int currY, int w, double timeTaken, boolean success) {
+    this.trialNum = trialNum;
+    this.mX = mX;
+    this.mY = mY;
+    this.currX = currX;
+    this.currY = currY;
+    this.w = w;
+    this.timeTaken = timeTaken;
+    this.success = success;
+  }
+
+  public String toString() {
+    String result =  String.format("Trial #: %d; Initial mouse: %d,%d; Center: %d,%d; Width: %d; Time taken: %f; ", trialNum, mX, mY, currX, currY, w, timeTaken);
+    if (success) {
+      result += "Success: YES!";
+    } else {
+      result += "Success: NO!";
+    }
+    return result;
+  }
+}
 
 // you SHOULD NOT need to edit any of these variables
 int lastX = 0;
 int lastY = 0;
+int lastMouseX = 0;
+int lastMouseY = 0;
+int lastMillis = 0;
+ArrayList datas = new ArrayList();
 int margin = 300; // margin from sides of window
 final int padding = 35; // padding between buttons and also their width/height
 ArrayList trials = new ArrayList(); //contains the order of buttons that activate in the test
@@ -20,7 +55,7 @@ int misses = 0; //number of missed clicks
 int best = Integer.MAX_VALUE;
 
 // You can edit variables below here and also add new ones as you see fit
-int numRepeats = 3; //sets the number of times each button repeats in the test (you can edit this)
+int numRepeats = 2; //sets the number of times each button repeats in the test (you can edit this)
 
 
 void draw()
@@ -63,9 +98,9 @@ void draw()
   stroke(255, 255, 255);
   ellipse(userX, userY, 12, 12); //draw user cursor as a circle with a diameter of 20
 
-  if (trialNum > 0 && trials.get(trialNum) == trials.get(trialNum - 1)) {
+  if (trialNum < trials.size() - 1 && trials.get(trialNum) == trials.get(trialNum + 1)) {
     fill(255);
-    text("CLICK SAME!", mouseX, mouseY - 10);
+    text("DOUBLE CLICK!", mouseX, mouseY - 10);
   }
 }
 
@@ -86,6 +121,9 @@ void mousePressed() // test to see if hit was in target!
     System.out.println("Accuracy: " + (float)hits*100f/(float)(hits+misses) +"%");
     System.out.println("Total time taken: " + (finishTime-startTime) / 1000f + " sec");
     System.out.println("Average time for each button: " + ((finishTime-startTime) / 1000f)/(float)(hits+misses) + " sec");
+    for (Object d : datas) {
+      System.out.println(d.toString());
+    }
   }
 
   Rectangle bounds = getButtonLocation((Integer)trials.get(trialNum));
@@ -96,7 +134,15 @@ void mousePressed() // test to see if hit was in target!
   {
     System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
     hits++;
+    if (trialNum > 0) {
+      Data newD = new Data(trialNum, lastMouseX, lastMouseY, bounds.x + bounds.width/2, bounds.y + bounds.width/2, padding, millis() - lastMillis, true);
+      datas.add(newD);
+    }
   } else
+    if (trialNum > 0) {
+      Data newD = new Data(trialNum, lastMouseX, lastMouseY, bounds.x + bounds.width/2, bounds.y + bounds.width/2, padding, millis() - lastMillis, false);
+      datas.add(newD);
+    }
   {
     System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
     misses++;
@@ -108,6 +154,9 @@ void mousePressed() // test to see if hit was in target!
 
   lastX = getButtonLocation((int) trials.get(trialNum)).x + padding/2;
   lastY = getButtonLocation((int) trials.get(trialNum)).y + padding/2;
+  lastMouseX = mouseX;
+  lastMouseY = mouseY;
+  lastMillis = millis();
 
   trialNum++; // Increment trial number
 }
@@ -167,12 +216,12 @@ void drawButton(int i)
 
   if ((Integer)trials.get(trialNum) == i) {// see if current button is the target
     stroke(0, 255, 0);
-    if(trialNum > 0 && trials.get(trialNum) == trials.get(trialNum - 1)) {
+    if (trialNum < trials.size() - 1 && trials.get(trialNum) == trials.get(trialNum + 1)) {
       fill(255, 0, 255);
     } else if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) {
       fill(0, 255, 0);
     } else {
-      fill(255, 0, 0); // if so, fill cyan
+      fill(255, 0, 0); // if so, fill cyand
     }
   } else if (trialNum < trials.size() - 1 && (Integer) trials.get(trialNum + 1) == i) {
     fill(0, 0, 255);
@@ -184,7 +233,6 @@ void drawButton(int i)
 }
 
 void keyPressed() {
-  System.out.println("HI");
   if (key == 32) {
     mousePressed();
   }
